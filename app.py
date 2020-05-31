@@ -28,14 +28,11 @@ def predict():
         except:
             return jsonify({'trace': traceback.format_exc()})
     else:
-        print ('Train the model first')
         return ('No model here to use')
 
 if __name__ == '__main__':
 
     lr = joblib.load("titanic_model.pkl")
-    print("model loaded")
     model_columns = joblib.load("titanic_model_columns.pkl")
-    print("model columns loaded")
 
     app.run()
