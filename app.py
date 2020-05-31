@@ -5,16 +5,20 @@ import joblib
 import traceback
 import pandas as pd
 import numpy as np
+import pickle
 
 app = Flask(__name__)
 CORS(app)
+# salary_model = pickle.load("salary_model.pkl", 'rb')
+lr = joblib.load("titanic_model.pkl")
+model_columns = joblib.load("titanic_model_columns.pkl")
 
 @app.route('/')
 def home_route():
     return jsonify({"txt": "This is the home page of my flask ML apis."})
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.route('/titanic_predict', methods=['POST'])
+def titanic_predict():
     if lr:
         try:
             json_ = request.json
@@ -30,10 +34,19 @@ def predict():
     else:
         return jsonify({"text": "No model here to use"})
 
-if __name__ == '__main__':
+# @app.route('/salary_predict',methods=['POST'])
+# def salary_predict():
+#     '''
+#     For rendering results on HTML GUI
+#     '''
+#     int_features = [int(x) for x in request.form.values()]
+#     final_features = [np.array(int_features)]
+#     prediction = salary_model.predict(final_features)
 
-    global lr 
-    lr = joblib.load("titanic_model.pkl")
-    model_columns = joblib.load("titanic_model_columns.pkl")
+#     output = round(prediction[0], 2)
+
+#     return jsonify(prediction_text='Employee Salary should be $ {}'.format(output))
+
+if __name__ == '__main__':
 
     app.run()
